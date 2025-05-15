@@ -1,13 +1,13 @@
 package com.berkay.order.service.domain.dto.message;
 
 import com.berkay.domain.valueobject.PaymentStatus;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Builder
@@ -21,5 +21,5 @@ public class PaymentResponse {
     private BigDecimal price;
     private Instant createdAt;
     private PaymentStatus paymentStatus;
-    private  List<String> failureMessages;
+    private List<String> failureMessages;
 }
