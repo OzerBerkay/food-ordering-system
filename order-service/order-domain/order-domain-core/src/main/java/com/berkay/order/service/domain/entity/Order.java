@@ -10,6 +10,9 @@ import com.berkay.order.service.domain.valueobject.TrackingId;
 import java.util.List;
 import java.util.UUID;
 
+// Order is an entity class.
+// Entity classes contains the methods to complete critical business rules and can act as an
+// aggregate root, and in that case forcing all business invariants is the responsibility of that entity.
 public class Order extends AggregateRoot<OrderId> {
     // Comes from outside
     // These are final because fixed on first order request.
