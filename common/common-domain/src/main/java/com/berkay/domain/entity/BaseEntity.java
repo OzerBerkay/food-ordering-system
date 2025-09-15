@@ -2,7 +2,7 @@ package com.berkay.domain.entity;
 
 import java.util.Objects;
 
-public class BaseEntity <ID>{
+public abstract class BaseEntity <ID>{
     private ID id;
 
     public ID getId() {
