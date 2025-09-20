@@ -1,0 +1,5 @@
+version: '28.3.2'
+
+networks:
+  food-ordering-system:
+    driver: bridge
