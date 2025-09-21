@@ -1,4 +1,4 @@
-package com.food.ordering.system.order.service.application.rest;
+package com.berkay.order.service.application.rest;
 
 import com.berkay.order.service.domain.dto.create.CreateOrderCommand;
 import com.berkay.order.service.domain.dto.create.CreateOrderResponse;

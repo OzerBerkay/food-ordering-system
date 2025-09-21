@@ -52,6 +52,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.berkay</groupId>
+				<artifactId>common-application</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.berkay</groupId>
 				<artifactId>order-application</artifactId>
 				<version>${project.version}</version>
 			</dependency>
