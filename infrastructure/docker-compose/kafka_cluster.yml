@@ -3,17 +3,17 @@ services:
   schema-registry:
     image: confluentinc/cp-schema-registry:${KAFKA_VERSION}
     hostname: schema-registry
-    depends_on:
+    depends_on: #Schema Registry will not start until the brokers are ready.
       - kafka-broker-1
       - kafka-broker-2
       - kafka-broker-3
-    ports:
+    ports: #Access via local host.
       - "8081:8081"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181' #Reads Kafka metadata via Zookeeper.
       SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka-broker-2:9092,LISTENER_LOCAL://localhost:29092
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka-broker-2:9092,LISTENER_LOCAL://localhost:29092 # Communication settings with Kafka brokers.
       SCHEMA_REGISTRY_DEBUG: 'true'
     networks:
       - ${GLOBAL_NETWORK:-kafka}
@@ -23,15 +23,15 @@ services:
     ports:
       - "19092:19092"
     environment:
-      KAFKA_BROKER_ID: 1
+      KAFKA_BROKER_ID: 1 #Broker ID must be unique within the cluster.
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-1:9092,LISTENER_LOCAL://localhost:19092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker-1:9092,LISTENER_LOCAL://localhost:19092 #Host and port information for external access to the broker.
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,LISTENER_LOCAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3 # Offset topics will be copied to 3 brokers.
       KAFKA_COMPRESSION_TYPE: producer
-    volumes:
-      - "./volumes/kafka/broker-1:/var/lib/kafka/data"
+    volumes: #Data is written permanently to the host.
+      - "./volumes/kafka/broker-1:/var/lib/kafka/data" #Matches /var/lib/kafka/data inside the container.
     networks:
       - ${GLOBAL_NETWORK:-kafka}
   kafka-broker-2:
@@ -68,12 +68,12 @@ services:
       - "./volumes/kafka/broker-3:/var/lib/kafka/data"
     networks:
       - ${GLOBAL_NETWORK:-kafka}
-  kafka-manager:
+  kafka-manager: #It allows us to view brokers and topics via the web UI.
     image: hlebalbau/kafka-manager:stable
-    restart: always
+    restart: always #If the container crashes, it automatically restarts.
     ports:
       - "9000:9000"
     environment:
-      ZK_HOSTS: "zookeeper:2181"
+      ZK_HOSTS: "zookeeper:2181" #Connects to Zookeeper.
     networks:
       - ${GLOBAL_NETWORK:-kafka}
