@@ -29,6 +29,8 @@ public class Order extends AggregateRoot<OrderId> {
     // Will be described later if needed
     private List<String> failureMessages;
 
+    public static final String FAILURE_MESSAGE_DELIMITER = ",";
+
     public void initializeOrder() {
         setId(new OrderId(UUID.randomUUID()));
         trackingId = new TrackingId(UUID.randomUUID());
@@ -92,7 +94,7 @@ public class Order extends AggregateRoot<OrderId> {
     private void validateItemsPrice() {
         Money orderItemsTotal = items.stream().map(orderItem -> {
             validateItemPrice(orderItem);
-            return orderItem.getSubtotal(); // gets all order item's subtotal in map
+            return orderItem.getSubTotal(); // gets all order item's subtotal in map
         }).reduce(Money.ZERO, Money::add); // add all order items' subtotal to get order items total so it reduces map to one value
 
         if (!price.equals(orderItemsTotal)) {
@@ -138,7 +140,7 @@ public class Order extends AggregateRoot<OrderId> {
         price = builder.price;
         items = builder.items;
         trackingId = builder.trackingId;
-        orderStatus = builder.status;
+        orderStatus = builder.orderStatus;
         failureMessages = builder.failureMessages;
     }
 
@@ -187,7 +189,7 @@ public class Order extends AggregateRoot<OrderId> {
         private Money price;
         private List<OrderItem> items;
         private TrackingId trackingId;
-        private OrderStatus status;
+        private OrderStatus orderStatus;
         private List<String> failureMessages;
 
         private Builder() {
@@ -228,8 +230,8 @@ public class Order extends AggregateRoot<OrderId> {
             return this;
         }
 
-        public Builder status(OrderStatus val) {
-            status = val;
+        public Builder orderStatus(OrderStatus val) {
+            orderStatus = val;
             return this;
         }
 
