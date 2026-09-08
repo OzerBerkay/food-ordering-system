@@ -1,8 +1,6 @@
 package com.berkay.identity.service.handler.address;
 
 import com.berkay.identity.service.domain.entity.Address;
-import com.berkay.identity.service.domain.entity.User;
-import com.berkay.identity.service.domain.exception.IdentityDomainException;
 import com.berkay.identity.service.dto.query.UserAddressResponse;
 import com.berkay.identity.service.ports.output.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
