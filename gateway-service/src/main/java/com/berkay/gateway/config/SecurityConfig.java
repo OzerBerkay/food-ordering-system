@@ -31,7 +31,7 @@ public class SecurityConfig {
                         // Aktüatör gibi sağlık kontrolü endpointlerine izin ver
                         .pathMatchers("/actuator/**").permitAll()
                         // Kullanıcı kayıt ve giriş (Auth) endpointlerine dışarıdan yetkisiz erişime izin ver
-                        .pathMatchers(HttpMethod.POST, "/auth/login", "/auth/register/**", "/auth/refresh").permitAll()
+                        .pathMatchers(HttpMethod.POST, "/auth/login/**", "/auth/register/**", "/auth/refresh").permitAll()
                         // Swagger ve OpenAPI endpointlerine izin ver
                         .pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/webjars/**", "/api-docs/**").permitAll()
                         // Public API'lere izin ver
