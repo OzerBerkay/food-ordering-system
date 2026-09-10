@@ -125,5 +125,10 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092,kafka-2:9092,kafka-3:9092
       KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
 
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "30094:9411"
+
 volumes:
   postgres-data:
