@@ -1,6 +1,5 @@
 package com.berkay.identity.service.handler;
 
-import com.berkay.identity.service.domain.entity.User;
 import com.berkay.identity.service.domain.exception.IdentityDomainException;
 import com.berkay.identity.service.domain.valueobject.UserId;
 import com.berkay.identity.service.dto.command.TokenRevocationResponse;
