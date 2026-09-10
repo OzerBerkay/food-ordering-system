@@ -60,7 +60,7 @@ class UserAuthControllerTest {
 
         when(authApplicationService.login(any(LoginCommand.class))).thenReturn(tokenResponse);
 
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post("/auth/login/customer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isOk())
@@ -75,7 +75,7 @@ class UserAuthControllerTest {
                 // Şifre boş bırakıldı
                 .build();
 
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post("/auth/login/customer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isBadRequest());

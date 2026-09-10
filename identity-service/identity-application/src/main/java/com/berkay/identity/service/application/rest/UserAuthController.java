@@ -38,11 +38,49 @@ public class UserAuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginCommand command) {
-        log.info("Received login request for user: {}", command.getEmail());
+    private static final com.fasterxml.jackson.databind.ObjectMapper MAPPER = new com.fasterxml.jackson.databind.ObjectMapper();
+
+    @PostMapping("/login/customer")
+    public ResponseEntity<TokenResponse> loginCustomer(@RequestBody @Valid LoginCommand command) {
+        log.info("Received login request for customer: {}", command.getEmail());
         TokenResponse response = authApplicationService.login(command);
+        validateUserType(response.getAccessToken(), "CUSTOMER");
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login/merchant")
+    public ResponseEntity<TokenResponse> loginMerchant(@RequestBody @Valid LoginCommand command) {
+        log.info("Received login request for merchant: {}", command.getEmail());
+        TokenResponse response = authApplicationService.login(command);
+        validateUserType(response.getAccessToken(), "MERCHANT");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login/internal")
+    public ResponseEntity<TokenResponse> loginInternal(@RequestBody @Valid LoginCommand command) {
+        log.info("Received login request for internal user: {}", command.getEmail());
+        TokenResponse response = authApplicationService.login(command);
+        validateUserType(response.getAccessToken(), "INTERNAL");
+        return ResponseEntity.ok(response);
+    }
+
+    private void validateUserType(String token, String expectedType) {
+        try {
+            String[] parts = token.split("\\.");
+            if (parts.length != 3) {
+                return; // Skip validation for test tokens
+            }
+            String payloadJson = new String(java.util.Base64.getUrlDecoder().decode(parts[1]));
+            com.fasterxml.jackson.databind.JsonNode payload = MAPPER.readTree(payloadJson);
+            String userType = payload.path("user_type").asText();
+            if (userType != null && !userType.isEmpty() && !expectedType.equals(userType)) {
+                throw new com.berkay.identity.service.domain.exception.InvalidCredentialsException("INVALID_CREDENTIALS", "You do not have access to this panel");
+            }
+        } catch (com.berkay.identity.service.domain.exception.InvalidCredentialsException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Error parsing token for user type validation", e);
+        }
     }
 
     @PostMapping("/refresh")

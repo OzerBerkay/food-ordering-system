@@ -2,11 +2,14 @@ package com.berkay.gateway.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
@@ -18,28 +21,34 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
+    @Order(0)
+    public SecurityWebFilterChain permitAllWebFilterChain(ServerHttpSecurity http) {
+        return http
+                .securityMatcher(new OrServerWebExchangeMatcher(
+                        new PathPatternParserServerWebExchangeMatcher("/auth/**"),
+                        new PathPatternParserServerWebExchangeMatcher("/actuator/**"),
+                        new PathPatternParserServerWebExchangeMatcher("/v3/api-docs/**"),
+                        new PathPatternParserServerWebExchangeMatcher("/swagger-ui/**"),
+                        new PathPatternParserServerWebExchangeMatcher("/webjars/**"),
+                        new PathPatternParserServerWebExchangeMatcher("/api-docs/**"),
+                        new PathPatternParserServerWebExchangeMatcher("/public/**")
+                ))
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .cors(Customizer.withDefaults())
+                .authorizeExchange(exchanges -> exchanges.anyExchange().permitAll())
+                .build();
+    }
+
+    @Bean
+    @Order(1)
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
         http
-                // API'lerde CSRF korumasına gerek yoktur (Session kullanmıyoruz)
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                // CORS konfigürasyonunu Spring Security zincirine entegre et
                 .cors(Customizer.withDefaults())
-
                 .authorizeExchange(exchanges -> exchanges
-                        // CORS preflight (OPTIONS) isteklerine global olarak izin ver
                         .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // Aktüatör gibi sağlık kontrolü endpointlerine izin ver
-                        .pathMatchers("/actuator/**").permitAll()
-                        // Kullanıcı kayıt ve giriş (Auth) endpointlerine dışarıdan yetkisiz erişime izin ver
-                        .pathMatchers(HttpMethod.POST, "/auth/login/**", "/auth/register/**", "/auth/refresh").permitAll()
-                        // Swagger ve OpenAPI endpointlerine izin ver
-                        .pathMatchers("/v3/api-docs/**", "/swagger-ui/**", "/webjars/**", "/api-docs/**").permitAll()
-                        // Public API'lere izin ver
-                        .pathMatchers(HttpMethod.GET, "/public/**").permitAll()
-                        // Diğer TÜM istekler için Token (Authentication) zorunlu kıl
                         .anyExchange().authenticated()
                 )
-                // JWT Token doğrulamasını aktif et
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
