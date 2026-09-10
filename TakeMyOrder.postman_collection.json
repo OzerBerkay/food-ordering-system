@@ -144,7 +144,8 @@
                                     ],
                                     "path": [
                                         "auth",
-                                        "login"
+                                        "login",
+                                        "customer"
                                     ]
                                 },
                                 "body": {
@@ -186,7 +187,8 @@
                                     ],
                                     "path": [
                                         "auth",
-                                        "login"
+                                        "login",
+                                        "merchant"
                                     ]
                                 },
                                 "body": {
@@ -307,7 +309,8 @@
                                     ],
                                     "path": [
                                         "auth",
-                                        "login"
+                                        "login",
+                                        "internal"
                                     ]
                                 },
                                 "body": {
