@@ -45,6 +45,7 @@ class UserProfileControllerTest {
                 .firstName("Updated First")
                 .lastName("Updated Last")
                 .imageUrl("https://example.com/updated.jpg")
+                .dateOfBirth(java.time.LocalDate.of(1995, 8, 15))
                 .build();
 
         UpdateUserProfileResponse response = UpdateUserProfileResponse.builder()

@@ -421,7 +421,12 @@
                                 },
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n    \"firstName\": \"Updated Name\",\n    \"lastName\": \"Updated Last Name\",\n    \"imageUrl\": \"https://example.com/image.jpg\"\n}"
+                                    "raw": "{\n    \"firstName\": \"Updated Name\",\n    \"lastName\": \"Updated Last Name\",\n    \"imageUrl\": \"https://example.com/image.jpg\",\n    \"dateOfBirth\": \"15-08-1995\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
                                 },
                                 "auth": {
                                     "type": "bearer",
