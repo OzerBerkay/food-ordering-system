@@ -169,6 +169,7 @@ public class UserQueryRepositoryImpl implements UserQueryRepository {
                 .isEmailVerified(user.getIsEmailVerified() != null ? user.getIsEmailVerified() : false)
                 .isPhoneVerified(user.getIsPhoneVerified() != null ? user.getIsPhoneVerified() : false)
                 .imageUrl(user.getImageUrl())
+                .dateOfBirth(user.getDateOfBirth())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .organizationalUnitIds(user.getOrganizationalUnitIds())

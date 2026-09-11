@@ -60,7 +60,7 @@ public class UpdateUserProfileCommandHandler {
 
         // 3. Transaction 2: Update DB and Complete Intent
         intentHelper.completeIntent(intent.getId().getValue(), u -> {
-            u.updateProfile(new FirstName(command.getFirstName()), new LastName(command.getLastName()), command.getImageUrl());
+            u.updateProfile(new FirstName(command.getFirstName()), new LastName(command.getLastName()), command.getImageUrl(), command.getDateOfBirth());
         });
 
         tokenRevocationPort.revokeAccessToken(currentUserId);
@@ -77,6 +77,7 @@ public class UpdateUserProfileCommandHandler {
                     .firstName(user.getFirstName() != null ? user.getFirstName().getValue() : null)
                     .lastName(user.getLastName() != null ? user.getLastName().getValue() : null)
                     .imageUrl(user.getImageUrl())
+                    .dateOfBirth(user.getDateOfBirth())
                     .build());
         } catch (JsonProcessingException e) {
             return "{}";
