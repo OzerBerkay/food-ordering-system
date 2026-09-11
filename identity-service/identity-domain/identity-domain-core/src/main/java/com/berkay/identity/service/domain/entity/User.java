@@ -35,6 +35,7 @@ public class User extends AggregateRoot<UserId> {
 
     // Profile
     private String imageUrl; // Profil fotosu (Opsiyonel string kalabilir)
+    private java.time.LocalDate dateOfBirth;
 
 
     // Audit
@@ -56,6 +57,7 @@ public class User extends AggregateRoot<UserId> {
         this.isEmailVerified = builder.isEmailVerified;
         this.isPhoneVerified = builder.isPhoneVerified;
         this.imageUrl = builder.imageUrl;
+        this.dateOfBirth = builder.dateOfBirth;
         this.createdAt = builder.createdAt;
         this.updatedAt = builder.updatedAt;
     }
@@ -182,10 +184,11 @@ public class User extends AggregateRoot<UserId> {
         }
     }
 
-    public void updateProfile(FirstName firstName, LastName lastName, String imageUrl) {
+    public void updateProfile(FirstName firstName, LastName lastName, String imageUrl, java.time.LocalDate dateOfBirth) {
         if (firstName != null) this.firstName = firstName;
         if (lastName != null) this.lastName = lastName;
         if (imageUrl != null) this.imageUrl = imageUrl;
+        if (dateOfBirth != null) this.dateOfBirth = dateOfBirth;
         updateAudit();
     }
 
@@ -315,6 +318,7 @@ public class User extends AggregateRoot<UserId> {
     public boolean isEmailVerified() { return isEmailVerified; }
     public boolean isPhoneVerified() { return isPhoneVerified; }
     public String getImageUrl() { return imageUrl; }
+    public java.time.LocalDate getDateOfBirth() { return dateOfBirth; }
     public ZonedDateTime getCreatedAt() { return createdAt; }
     public ZonedDateTime getUpdatedAt() { return updatedAt; }
 
@@ -337,6 +341,7 @@ public class User extends AggregateRoot<UserId> {
         private boolean isEmailVerified;
         private boolean isPhoneVerified;
         private String imageUrl;
+        private java.time.LocalDate dateOfBirth;
         private ZonedDateTime createdAt;
         private ZonedDateTime updatedAt;
 
@@ -358,6 +363,7 @@ public class User extends AggregateRoot<UserId> {
         public Builder isEmailVerified(boolean val) { isEmailVerified = val; return this; }
         public Builder isPhoneVerified(boolean val) { isPhoneVerified = val; return this; }
         public Builder imageUrl(String val) { imageUrl = val; return this; }
+        public Builder dateOfBirth(java.time.LocalDate val) { dateOfBirth = val; return this; }
         public Builder createdAt(ZonedDateTime val) { createdAt = val; return this; }
         public Builder updatedAt(ZonedDateTime val) { updatedAt = val; return this; }
 
@@ -372,6 +378,7 @@ public class User extends AggregateRoot<UserId> {
                     .firstName(user.getFirstName())
                     .lastName(user.getLastName())
                     .imageUrl(user.getImageUrl())
+                    .dateOfBirth(user.getDateOfBirth())
                     .isEmailVerified(user.isEmailVerified())
                     .isPhoneVerified(user.isPhoneVerified())
                     .userType(user.getUserType())

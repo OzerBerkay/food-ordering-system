@@ -51,6 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
             entityToSave.setLastName(user.getLastName().getValue());
             entityToSave.setPhoneNumber(user.getPhoneNumber().getValue());
             entityToSave.setImageUrl(user.getImageUrl());
+            entityToSave.setDateOfBirth(user.getDateOfBirth());
             entityToSave.setStatus(user.getStatus());
             entityToSave.setUpdatedAt(user.getUpdatedAt());
             
