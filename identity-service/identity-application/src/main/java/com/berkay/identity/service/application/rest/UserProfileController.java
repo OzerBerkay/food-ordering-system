@@ -18,10 +18,11 @@ public class UserProfileController {
     private final UserApplicationService userApplicationService;
 
     @PatchMapping("/profile")
-    public ResponseEntity<UpdateUserProfileResponse> updateUserProfile(@RequestBody @Valid UpdateUserProfileCommand command) {
-        log.info("Received PATCH request to update user profile");
-        UpdateUserProfileResponse response = userApplicationService.updateUserProfile(command);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<com.berkay.identity.service.dto.query.UserResponse> updateUserProfile(@RequestBody @Valid UpdateUserProfileCommand command) {
+        log.info("Received PATCH request to update user profile. dateOfBirth parsed as: {}", command.getDateOfBirth());
+        userApplicationService.updateUserProfile(command);
+        java.util.UUID userId = getAuthenticatedUserId();
+        return ResponseEntity.ok(userApplicationService.getUserProfile(userId));
     }
 
     @GetMapping

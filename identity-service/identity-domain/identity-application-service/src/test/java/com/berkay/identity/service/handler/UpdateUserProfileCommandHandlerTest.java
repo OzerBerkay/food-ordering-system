@@ -66,6 +66,7 @@ class UpdateUserProfileCommandHandlerTest {
                 .firstName("NewName")
                 .lastName("NewLastName")
                 .imageUrl("http://example.com/img.jpg")
+                .dateOfBirth(java.time.LocalDate.of(1995, 8, 15))
                 .build();
 
         user = User.Builder.builder()
