@@ -80,6 +80,7 @@ public class UserDataMapper {
                 .isEmailVerified(user.isEmailVerified())
                 .isPhoneVerified(user.isPhoneVerified())
                 .imageUrl(user.getImageUrl())
+                .dateOfBirth(user.getDateOfBirth())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .organizationalUnitIds(user.getOrganizationalUnitIds())

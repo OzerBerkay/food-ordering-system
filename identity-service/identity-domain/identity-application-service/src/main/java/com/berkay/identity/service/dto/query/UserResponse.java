@@ -11,6 +11,7 @@ import java.util.UUID;
 @Getter
 @Builder
 @AllArgsConstructor
+@lombok.extern.jackson.Jacksonized
 public class UserResponse {
     private final java.util.UUID id;
     private final String externalId;
@@ -24,6 +25,12 @@ public class UserResponse {
     private final boolean isEmailVerified;
     private final boolean isPhoneVerified;
     private final String imageUrl;
+
+    @com.fasterxml.jackson.annotation.JsonProperty("dateOfBirth")
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer.class)
+    @com.fasterxml.jackson.databind.annotation.JsonSerialize(using = com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer.class)
+    private final java.time.LocalDate dateOfBirth;
     private final java.time.ZonedDateTime createdAt;
     private final java.time.ZonedDateTime updatedAt;
     private final List<java.util.UUID> organizationalUnitIds;

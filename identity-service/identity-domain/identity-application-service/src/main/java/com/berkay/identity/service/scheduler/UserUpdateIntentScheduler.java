@@ -93,7 +93,7 @@ public class UserUpdateIntentScheduler {
             try {
                 if (UpdateUserProfileCommand.class.getSimpleName().equals(commandType)) {
                     UpdateUserProfileCommand command = objectMapper.readValue(intent.getNewSnapshot(), UpdateUserProfileCommand.class);
-                    u.updateProfile(new FirstName(command.getFirstName()), new LastName(command.getLastName()), command.getImageUrl());
+                    u.updateProfile(new FirstName(command.getFirstName()), new LastName(command.getLastName()), command.getImageUrl(), command.getDateOfBirth());
                 } else if (UpdateUserStatusCommand.class.getSimpleName().equals(commandType)) {
                     UpdateUserStatusCommand command = objectMapper.readValue(intent.getNewSnapshot(), UpdateUserStatusCommand.class);
                     u.updateStatus(command.getStatus());
