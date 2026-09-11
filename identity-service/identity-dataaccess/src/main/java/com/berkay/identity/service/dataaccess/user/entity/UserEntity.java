@@ -44,6 +44,9 @@ public class UserEntity extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "date_of_birth")
+    private java.time.LocalDate dateOfBirth;
+
     @Column(name = "is_email_verified", nullable = false)
     private Boolean isEmailVerified;
 
