@@ -10,4 +10,5 @@ public interface AddressRepository {
     Optional<Address> findById(AddressId addressId);
     java.util.List<Address> findByUserId(com.berkay.identity.service.domain.valueobject.UserId userId);
     void deleteById(AddressId addressId);
+    void makeAllAddressesNonDefault(com.berkay.identity.service.domain.valueobject.UserId userId);
 }

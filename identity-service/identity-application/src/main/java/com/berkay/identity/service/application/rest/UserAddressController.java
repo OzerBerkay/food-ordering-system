@@ -33,11 +33,7 @@ public class UserAddressController {
     public ResponseEntity<AddressResponse> updateAddress(@PathVariable UUID addressId,
                                                          @RequestBody @Valid UpdateAddressCommand command) {
         log.info("Received request to update address id: {}", addressId);
-        // Ensure path variable matches command if command has addressId
-        if (!addressId.equals(command.getAddressId())) {
-            return ResponseEntity.badRequest().build();
-        }
-        AddressResponse response = addressApplicationService.updateAddress(command);
+        AddressResponse response = addressApplicationService.updateAddress(addressId, command);
         return ResponseEntity.ok(response);
     }
 
@@ -56,11 +52,11 @@ public class UserAddressController {
     }
 
     @DeleteMapping("/{addressId}")
-    public ResponseEntity<Void> deleteMyAddress(@PathVariable UUID addressId) {
+    public ResponseEntity<AddressResponse> deleteMyAddress(@PathVariable UUID addressId) {
         UUID userId = getAuthenticatedUserId();
         log.info("Received request to delete address {} for user: {}", addressId, userId);
-        addressApplicationService.deleteMyAddress(userId, addressId);
-        return ResponseEntity.noContent().build();
+        AddressResponse response = addressApplicationService.deleteMyAddress(userId, addressId);
+        return ResponseEntity.ok(response);
     }
 
     private UUID getAuthenticatedUserId() {

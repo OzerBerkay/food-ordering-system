@@ -27,10 +27,18 @@ public class QueryMyAddressesHandler {
                 .id(address.getId().getValue())
                 .userId(address.getUserId().getValue())
                 .name(address.getName())
-                .street(address.getStreet())
-                .postalCode(address.getPostalCode())
                 .city(address.getCity())
-                .country(address.getCountry())
+                .district(address.getDistrict())
+                .neighborhood(address.getNeighborhood())
+                .street(address.getStreet())
+                .buildingNumber(address.getBuildingNumber())
+                .doorNumber(address.getDoorNumber())
+                .floor(address.getFloor())
+                .addressInstructions(address.getAddressInstructions())
+                .contactFirstName(address.getContactFirstName())
+                .contactLastName(address.getContactLastName())
+                .contactPhone(address.getContactPhone())
+                .isDefault(address.isDefault())
                 .build()).collect(Collectors.toList());
     }
 }

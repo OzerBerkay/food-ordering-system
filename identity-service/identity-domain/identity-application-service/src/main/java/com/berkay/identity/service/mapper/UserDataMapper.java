@@ -4,7 +4,7 @@ import com.berkay.identity.service.domain.entity.Address;
 import com.berkay.identity.service.domain.entity.Role;
 import com.berkay.identity.service.domain.entity.User;
 import com.berkay.identity.service.domain.valueobject.*;
-import com.berkay.identity.service.dto.command.CreateAddressCommand;
+
 import com.berkay.identity.service.dto.command.RegisterInternalUserCommand;
 import com.berkay.identity.service.dto.command.RegisterCustomerCommand;
 import com.berkay.identity.service.dto.command.RegisterMerchantCommand;

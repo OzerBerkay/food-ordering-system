@@ -43,4 +43,9 @@ public class AddressRepositoryImpl implements AddressRepository {
     public void deleteById(AddressId addressId) {
         addressJpaRepository.deleteById(addressId.getValue());
     }
+
+    @Override
+    public void makeAllAddressesNonDefault(com.berkay.identity.service.domain.valueobject.UserId userId) {
+        addressJpaRepository.makeAllAddressesNonDefault(userId.getValue());
+    }
 }
