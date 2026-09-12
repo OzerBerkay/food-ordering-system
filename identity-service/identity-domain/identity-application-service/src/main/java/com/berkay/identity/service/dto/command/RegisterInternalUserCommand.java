@@ -39,6 +39,4 @@ public class RegisterInternalUserCommand {
     @Size(min = 1, message = "At least one role is required")
     private final List<UUID> roleIds;
 
-    @Valid
-    private final List<CreateAddressCommand> addresses;
 }

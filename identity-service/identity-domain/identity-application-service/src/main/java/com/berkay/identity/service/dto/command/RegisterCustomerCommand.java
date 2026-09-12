@@ -33,7 +33,4 @@ public class RegisterCustomerCommand {
     @com.berkay.identity.service.dto.validation.ValidPhoneNumber
     private final String phoneNumber;
 
-    // Adres listesi opsiyonel olabilir (null gelebilir) ama gelirse içi valid olmalı.
-    @Valid
-    private final List<CreateAddressCommand> addresses;
 }

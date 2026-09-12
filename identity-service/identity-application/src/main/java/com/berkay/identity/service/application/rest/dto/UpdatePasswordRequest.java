@@ -11,6 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdatePasswordRequest {
+    @NotBlank(message = "Old password is required")
+    private String oldPassword;
+
     @com.berkay.identity.service.dto.validation.ValidPassword
     private String newPassword;
+
+    @NotBlank(message = "Password confirmation is required")
+    private String newPasswordConfirm;
 }

@@ -9,12 +9,9 @@ import com.berkay.identity.service.dto.command.CreateUserResponse;
 import com.berkay.identity.service.dto.command.RegisterCustomerCommand;
 import com.berkay.identity.service.handler.helper.UserCreateHelper;
 import com.berkay.identity.service.mapper.UserDataMapper;
-import com.berkay.identity.service.ports.output.repository.AddressRepository;
+import com.berkay.identity.service.ports.output.message.publisher.CustomerMessagePublisher;
 import com.berkay.identity.service.ports.output.repository.IdentityProviderPort;
 import com.berkay.identity.service.ports.output.repository.UserRepository;
-import com.berkay.identity.service.ports.output.message.publisher.CustomerMessagePublisher;
-import com.berkay.identity.service.dto.command.CreateAddressCommand;
-import com.berkay.identity.service.domain.entity.Address;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,7 +24,6 @@ public class RegisterCustomerCommandHandler {
 
     private final IdentityDomainService identityDomainService;
     private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
     private final UserDataMapper userDataMapper;
     private final IdentityProviderPort identityProviderPort;
     private final UserCreateHelper userCreateHelper;
@@ -60,21 +56,6 @@ public class RegisterCustomerCommandHandler {
         try {
             // DB Kayıt
             userRepository.save(finalUser);
-            
-            // Adresleri Kaydet
-            if (command.getAddresses() != null && !command.getAddresses().isEmpty()) {
-                for (CreateAddressCommand addressCommand : command.getAddresses()) {
-                    Address address = Address.create(
-                            finalUser.getId(),
-                            addressCommand.getName(),
-                            addressCommand.getStreet(),
-                            addressCommand.getCity(),
-                            addressCommand.getPostalCode(),
-                            addressCommand.getCountry()
-                    );
-                    addressRepository.save(address);
-                }
-            }
         } catch (Exception e) {
             log.error("Failed to save user in DB! Rolling back Keycloak creation for externalId: {}", externalId, e);
             identityProviderPort.deleteUser(externalId);

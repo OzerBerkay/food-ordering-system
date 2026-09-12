@@ -120,7 +120,9 @@ class UserAuthControllerTest {
     @DisplayName("Başarılı Senaryo: Update Password işlemi başarılı olunca HTTP 204 dönmelidir.")
     void shouldReturn204_WhenUpdatePasswordIsSuccessful() throws Exception {
         UpdatePasswordCommand command = UpdatePasswordCommand.builder()
+                .oldPassword("Old123!")
                 .newPassword("Customer1234!")
+                .newPasswordConfirm("Customer1234!")
                 .build();
 
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put("/auth/password")

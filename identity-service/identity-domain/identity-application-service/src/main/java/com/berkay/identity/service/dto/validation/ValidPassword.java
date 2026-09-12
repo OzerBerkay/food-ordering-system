@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @NotBlank(message = "Password is required")
 @Pattern(
-        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&+\\-#._])[A-Za-z\\d@$!%*?&+\\-#._]{8,40}$",
+        regexp = "^(?=.*[a-zçğıöşü])(?=.*[A-ZÇĞİÖŞÜ])(?=.*\\d)(?=.*[@$!%*?&+\\-#._])[A-Za-zçğıöşüÇĞİÖŞÜ\\d@$!%*?&+\\-#._]{8,40}$",
         message = "Password must be 8-40 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character"
 )
 public @interface ValidPassword {
