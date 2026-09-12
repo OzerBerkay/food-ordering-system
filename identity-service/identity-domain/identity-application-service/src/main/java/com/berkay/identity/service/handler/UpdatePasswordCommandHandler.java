@@ -28,6 +28,17 @@ public class UpdatePasswordCommandHandler {
         User user = userRepository.findById(new UserId(currentUserId))
                 .orElseThrow(() -> new IdentityDomainException("User not found with id: " + currentUserId));
 
+        if (!command.getNewPassword().equals(command.getNewPasswordConfirm())) {
+            throw new IdentityDomainException("New password and confirmation do not match!");
+        }
+
+        try {
+            identityProviderPort.login(user.getEmail().getValue(), command.getOldPassword());
+        } catch (Exception e) {
+            log.warn("Password update failed due to incorrect old password for user id: {}", currentUserId);
+            throw new IdentityDomainException("Old password is incorrect!");
+        }
+
         identityProviderPort.updatePassword(user.getExternalId(), command.getNewPassword());
         log.info("Password updated successfully for user id: {}", user.getId().getValue());
     }

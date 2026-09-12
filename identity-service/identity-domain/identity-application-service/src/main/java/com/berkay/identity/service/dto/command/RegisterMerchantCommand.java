@@ -33,6 +33,4 @@ public class RegisterMerchantCommand {
     @com.berkay.identity.service.dto.validation.ValidPhoneNumber
     private final String phoneNumber;
 
-    @Valid
-    private final List<CreateAddressCommand> addresses;
 }

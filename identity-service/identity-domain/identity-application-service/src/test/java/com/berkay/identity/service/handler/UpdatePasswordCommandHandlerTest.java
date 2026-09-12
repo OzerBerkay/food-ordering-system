@@ -45,14 +45,17 @@ class UpdatePasswordCommandHandlerTest {
         String externalId = UUID.randomUUID().toString();
         
         UpdatePasswordCommand command = UpdatePasswordCommand.builder()
+                .oldPassword("Old123!")
                 .newPassword("New123!")
+                .newPasswordConfirm("New123!")
                 .build();
 
-        User user = User.builder().externalId(externalId).build();
+        User user = User.builder().externalId(externalId).email(new com.berkay.identity.service.domain.valueobject.UserEmail("test@test.com")).build();
         user.setId(new UserId(currentUserId));
 
         when(securityContextPort.getCurrentInternalUserId()).thenReturn(currentUserId);
         when(userRepository.findById(new UserId(currentUserId))).thenReturn(Optional.of(user));
+        when(identityProviderPort.login("test@test.com", "Old123!")).thenReturn(null);
         doNothing().when(identityProviderPort).updatePassword(externalId, command.getNewPassword());
 
         // Act
@@ -61,6 +64,7 @@ class UpdatePasswordCommandHandlerTest {
         // Assert
         verify(securityContextPort).getCurrentInternalUserId();
         verify(userRepository).findById(new UserId(currentUserId));
+        verify(identityProviderPort).login("test@test.com", "Old123!");
         verify(identityProviderPort).updatePassword(externalId, command.getNewPassword());
     }
 
@@ -69,7 +73,9 @@ class UpdatePasswordCommandHandlerTest {
     void updatePassword_ShouldThrowException_WhenNoValidToken() {
         // Arrange
         UpdatePasswordCommand command = UpdatePasswordCommand.builder()
+                .oldPassword("Old123!")
                 .newPassword("New123!")
+                .newPasswordConfirm("New123!")
                 .build();
 
         when(securityContextPort.getCurrentInternalUserId())

@@ -41,6 +41,15 @@ class UserProfileControllerTest {
     @Test
     @DisplayName("Başarılı Senaryo: Profil güncellenince HTTP 200 dönmelidir.")
     void shouldReturn200_WhenUpdateProfileIsSuccessful() throws Exception {
+        java.util.UUID userId = java.util.UUID.randomUUID();
+        
+        com.berkay.identity.service.application.security.jwt.JwtAuthenticationToken jwtAuth = new com.berkay.identity.service.application.security.jwt.JwtAuthenticationToken(
+                java.util.UUID.randomUUID(), userId, com.berkay.identity.service.domain.valueobject.UserType.INTERNAL,
+                com.berkay.identity.service.domain.valueobject.AccountStatus.ACTIVE, "test@test.com",
+                java.util.Collections.emptyList(), java.util.Collections.emptyList(), "sid", "token"
+        );
+        org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(jwtAuth);
+
         UpdateUserProfileCommand command = UpdateUserProfileCommand.builder()
                 .firstName("Updated First")
                 .lastName("Updated Last")
@@ -52,13 +61,23 @@ class UserProfileControllerTest {
                 .message("Profile successfully updated")
                 .build();
 
+        com.berkay.identity.service.dto.query.UserResponse userResponse = com.berkay.identity.service.dto.query.UserResponse.builder()
+                .id(userId)
+                .firstName("Updated First")
+                .lastName("Updated Last")
+                .build();
+
         when(userApplicationService.updateUserProfile(any(UpdateUserProfileCommand.class))).thenReturn(response);
+        when(userApplicationService.getUserProfile(userId)).thenReturn(userResponse);
 
         mockMvc.perform(patch("/users/me/profile")
+                        .principal(jwtAuth)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Profile successfully updated"));
+                .andExpect(jsonPath("$.firstName").value("Updated First"));
+                
+        org.springframework.security.core.context.SecurityContextHolder.clearContext();
     }
 
     @Test

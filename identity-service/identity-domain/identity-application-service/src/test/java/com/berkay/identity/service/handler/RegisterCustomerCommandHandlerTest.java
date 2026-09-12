@@ -12,9 +12,6 @@ import com.berkay.identity.service.handler.helper.UserCreateHelper;
 import com.berkay.identity.service.mapper.UserDataMapper;
 import com.berkay.identity.service.ports.output.repository.IdentityProviderPort;
 import com.berkay.identity.service.ports.output.repository.UserRepository;
-import com.berkay.identity.service.ports.output.repository.AddressRepository;
-import com.berkay.identity.service.dto.command.CreateAddressCommand;
-import com.berkay.identity.service.domain.entity.Address;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,8 +45,6 @@ class RegisterCustomerCommandHandlerTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private AddressRepository addressRepository;
 
     @Mock
     private UserDataMapper userDataMapper;
@@ -107,48 +102,6 @@ class RegisterCustomerCommandHandlerTest {
         verify(userDataMapper).userToCreateUserResponse(any(User.class), eq("Customer registered successfully. Please verify your email/phone."));
     }
 
-    @Test
-    @DisplayName("Başarılı Senaryo (Adresli): Müşteri kaydı sırasında adres gönderilmişse, adreslerin de kaydedilmesi")
-    void registerCustomer_ShouldSucceedAndSaveAddresses_WhenAddressesAreProvided() {
-        // Arrange
-        CreateAddressCommand addressCommand = CreateAddressCommand.builder()
-                .name("Ev Adresi")
-                .street("Örnek Sokak No 5")
-                .city("İstanbul")
-                .postalCode("34000")
-                .country("Turkey")
-                .build();
-
-        RegisterCustomerCommand command = RegisterCustomerCommand.builder()
-                .email("test@example.com")
-                .phoneNumber("+905551234567")
-                .password("Password123!")
-                .addresses(List.of(addressCommand))
-                .build();
-
-        Role customerRole = mock(Role.class);
-        User tempUser = User.builder().build();
-        tempUser.setId(new UserId(UUID.randomUUID()));
-        String externalId = UUID.randomUUID().toString();
-        CreateUserResponse response = CreateUserResponse.builder().message("Success").build();
-
-        doNothing().when(userCreateHelper).checkUserUniqueness(command.getEmail(), command.getPhoneNumber());
-        when(userRepository.findRoleByName(RoleConstants.CUSTOMER_BASE)).thenReturn(Optional.of(customerRole));
-        when(userDataMapper.registerCustomerCommandToUser(command, customerRole)).thenReturn(tempUser);
-        doNothing().when(identityDomainService).initiateCustomer(tempUser);
-        when(identityProviderPort.registerUser(tempUser, command.getPassword())).thenReturn(externalId);
-        when(userRepository.save(any(User.class))).thenReturn(tempUser);
-        when(userDataMapper.userToCreateUserResponse(any(User.class), any())).thenReturn(response);
-
-        // Act
-        CreateUserResponse result = handler.registerCustomer(command);
-
-        // Assert
-        assertNotNull(result);
-        verify(userRepository).save(any(User.class));
-        verify(addressRepository).save(any(Address.class)); // Adresin kaydedildiğini test et
-        verify(customerMessagePublisher).publish(tempUser);
-    }
 
     @Test
     @DisplayName("Hata Senaryosu (Average Case): Müşteri rolünün veritabanında bulunamaması durumunda Keycloak'a gidilmeden işlemin kesilmesi")

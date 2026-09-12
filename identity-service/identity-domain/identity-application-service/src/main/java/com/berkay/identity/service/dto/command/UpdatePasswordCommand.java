@@ -11,6 +11,12 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class UpdatePasswordCommand {
+    @jakarta.validation.constraints.NotBlank(message = "Old password is required")
+    private final String oldPassword;
+
     @com.berkay.identity.service.dto.validation.ValidPassword
     private final String newPassword;
+
+    @jakarta.validation.constraints.NotBlank(message = "Password confirmation is required")
+    private final String newPasswordConfirm;
 }

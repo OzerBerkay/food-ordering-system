@@ -12,10 +12,6 @@ import com.berkay.identity.service.handler.helper.UserCreateHelper;
 import com.berkay.identity.service.mapper.UserDataMapper;
 import com.berkay.identity.service.ports.output.repository.IdentityProviderPort;
 import com.berkay.identity.service.ports.output.repository.UserRepository;
-import com.berkay.identity.service.ports.output.repository.AddressRepository;
-import com.berkay.identity.service.dto.command.CreateAddressCommand;
-import com.berkay.identity.service.domain.entity.Address;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,8 +44,6 @@ class RegisterMerchantCommandHandlerTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private AddressRepository addressRepository;
 
     @Mock
     private UserDataMapper userDataMapper;
