@@ -30,8 +30,8 @@ public class AddressApplicationServiceImpl implements AddressApplicationService 
     }
 
     @Override
-    public AddressResponse updateAddress(UpdateAddressCommand command) {
-        return addressCommandHandler.updateAddress(command);
+    public AddressResponse updateAddress(java.util.UUID addressId, UpdateAddressCommand command) {
+        return addressCommandHandler.updateAddress(addressId, command);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class AddressApplicationServiceImpl implements AddressApplicationService 
     }
 
     @Override
-    public void deleteMyAddress(java.util.UUID userId, java.util.UUID addressId) {
-        deleteMyAddressCommandHandler.deleteMyAddress(userId, addressId);
+    public com.berkay.identity.service.dto.command.AddressResponse deleteMyAddress(java.util.UUID userId, java.util.UUID addressId) {
+        return deleteMyAddressCommandHandler.deleteMyAddress(userId, addressId);
     }
 }

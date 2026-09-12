@@ -20,7 +20,7 @@ public class DeleteMyAddressCommandHandler {
     private final AddressRepository addressRepository;
 
     @Transactional
-    public void deleteMyAddress(UUID userId, UUID addressId) {
+    public com.berkay.identity.service.dto.command.AddressResponse deleteMyAddress(UUID userId, UUID addressId) {
         log.info("Deleting address {} for user: {}", addressId, userId);
         
         Address addressToRemove = addressRepository.findById(new AddressId(addressId))
@@ -32,5 +32,10 @@ public class DeleteMyAddressCommandHandler {
         
         addressRepository.deleteById(new AddressId(addressId));
         log.info("Address {} successfully deleted for user {}", addressId, userId);
+        
+        return com.berkay.identity.service.dto.command.AddressResponse.builder()
+                .addressId(addressId)
+                .message("Address successfully deleted")
+                .build();
     }
 }

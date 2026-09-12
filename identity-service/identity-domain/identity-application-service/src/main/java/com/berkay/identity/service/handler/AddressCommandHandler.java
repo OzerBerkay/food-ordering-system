@@ -29,13 +29,25 @@ public class AddressCommandHandler {
         UUID currentUserId = securityContextPort.getCurrentInternalUserId();
         log.info("Adding address for user id: {}", currentUserId);
 
+        if (command.isDefault()) {
+            addressRepository.makeAllAddressesNonDefault(new UserId(currentUserId));
+        }
+
         Address address = Address.create(
                 new UserId(currentUserId),
                 command.getName(),
-                command.getStreet(),
                 command.getCity(),
-                command.getPostalCode(),
-                command.getCountry()
+                command.getDistrict(),
+                command.getNeighborhood(),
+                command.getStreet(),
+                command.getBuildingNumber(),
+                command.getDoorNumber(),
+                command.getFloor(),
+                command.getAddressInstructions(),
+                command.getContactFirstName(),
+                command.getContactLastName(),
+                command.getContactPhone(),
+                command.isDefault()
         );
 
         address = addressRepository.save(address);
@@ -47,26 +59,38 @@ public class AddressCommandHandler {
     }
 
     @Transactional
-    public AddressResponse updateAddress(UpdateAddressCommand command) {
+    public AddressResponse updateAddress(UUID addressId, UpdateAddressCommand command) {
         UUID currentUserId = securityContextPort.getCurrentInternalUserId();
-        log.info("Updating address id: {} for user id: {}", command.getAddressId(), currentUserId);
+        log.info("Updating address id: {} for user id: {}", addressId, currentUserId);
 
-        Address address = addressRepository.findById(new AddressId(command.getAddressId()))
+        Address address = addressRepository.findById(new AddressId(addressId))
                 .orElseThrow(() -> new IdentityDomainException("Address not found!"));
 
         if (!address.getUserId().getValue().equals(currentUserId)) {
-            log.error("IDOR Attempt! User {} tried to update address {} belonging to user {}", currentUserId, command.getAddressId(), address.getUserId().getValue());
+            log.error("IDOR Attempt! User {} tried to update address {} belonging to user {}", currentUserId, addressId, address.getUserId().getValue());
             throw new IdentityDomainException("You are not authorized to update this address!");
+        }
+
+        if (command.isDefault() && !address.isDefault()) {
+            addressRepository.makeAllAddressesNonDefault(new UserId(currentUserId));
         }
 
         Address updatedAddress = Address.builder()
                 .addressId(address.getId())
                 .userId(address.getUserId())
                 .name(command.getName())
-                .street(command.getStreet())
                 .city(command.getCity())
-                .postalCode(command.getPostalCode())
-                .country(command.getCountry())
+                .district(command.getDistrict())
+                .neighborhood(command.getNeighborhood())
+                .street(command.getStreet())
+                .buildingNumber(command.getBuildingNumber())
+                .doorNumber(command.getDoorNumber())
+                .floor(command.getFloor())
+                .addressInstructions(command.getAddressInstructions())
+                .contactFirstName(command.getContactFirstName())
+                .contactLastName(command.getContactLastName())
+                .contactPhone(command.getContactPhone())
+                .isDefault(command.isDefault())
                 .build();
 
         updatedAddress = addressRepository.save(updatedAddress);
